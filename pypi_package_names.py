@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 from contextlib import closing
 
 try:
@@ -88,4 +89,4 @@ def get_unique_package_names(html_only=False):  # type: (bool | None) -> str
 
 if __name__ == "__main__":
     package_names = get_unique_package_names()
-    print(package_names, end="")
+    sys.stdout.write(package_names)
