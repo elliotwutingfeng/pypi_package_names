@@ -21,8 +21,8 @@ logger.addHandler(handler)
 
 CONTENT_TYPES = (
     "application/vnd.pypi.simple.v1+json",
-    "application/vnd.pypi.simple.v1+html",
-    "text/html",  # For legacy compatibility
+    "application/vnd.pypi.simple.v1+html;q=0.2",
+    "text/html;q=0.01",  # For legacy compatibility
 )  # PEP 691
 
 
@@ -56,19 +56,16 @@ def get_body(url, accept):  # type: (str, str) -> tuple[str, str | None]
 
 def get_unique_package_names(html_only=False):  # type: (bool | None) -> str
     accept_header = CONTENT_TYPES[2] if html_only else ", ".join(CONTENT_TYPES)
+
     source, content_type = get_body("https://pypi.python.org/simple", accept_header)
-    if not any(content_type.startswith(c) for c in CONTENT_TYPES):
-        raise ValueError("Invalid content-type", content_type)
+
     if content_type.startswith(CONTENT_TYPES[0]):
         body_json = json.loads(source)
         package_names = sorted(
-            set(
-                entry["name"]
-                for entry in body_json.get("projects", [])
-                if entry.get("name", "")
-            )
+            set(entry.get("name", "") for entry in body_json.get("projects", []))
+            - set([""])
         )  # type: list[str]
-    else:
+    elif any(content_type.startswith(c.split(";")[0]) for c in CONTENT_TYPES[1:]):
         parser = (
             ExtractAHref()
         )  # Parse legacy HTML page as fallback if JSON response is unavailable.
@@ -78,11 +75,13 @@ def get_unique_package_names(html_only=False):  # type: (bool | None) -> str
             set(
                 path.rsplit("/", 2)[-2]
                 for path in paths
-                if path.startswith("/simple/")
-                and path.endswith("/")
-                and path.count("/") == 3
+                if path.startswith("/simple/") and path.count("/") == 3
             )
+            - set([""])
         )  # type: list[str]
+    else:
+        raise ValueError("Invalid content-type", content_type)
+
     logger.info("%d unique package names found", len(package_names))
     return json.dumps(package_names)
 
