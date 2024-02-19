@@ -47,8 +47,7 @@ def get_body(url, accept):  # type: (str, str) -> tuple[str, str | None]
             if status_code == 200:
                 data = f.read().decode("utf-8")
                 return data, f.headers.get("content-type", None)
-            logger.error(status_code)
-            return "", None
+            raise Exception(status_code)
     except Exception as e:
         logger.error(e)
         return "", None
@@ -87,5 +86,4 @@ def get_unique_package_names(html_only=False):  # type: (bool | None) -> str
 
 
 if __name__ == "__main__":
-    package_names = get_unique_package_names()
-    sys.stdout.write(package_names)
+    sys.stdout.write(get_unique_package_names())
