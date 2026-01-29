@@ -5,10 +5,10 @@ jobs:
     test-and-coverage:
         strategy:
           matrix:
-            python-version: ['2.7','3.5','3.13']
+            python-version: ['2.7','3.5','3.14']
         container:
           image: python:${{ matrix.python-version }}
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-slim
         steps:
             - name: checkout repo content
               uses: actions/checkout@v6
@@ -20,5 +20,5 @@ jobs:
                   python -m pytest --cov
 
             - name: Coveralls
-              if: matrix.python-version == '3.13'
+              if: matrix.python-version == '3.14'
               uses: coverallsapp/github-action@v2
