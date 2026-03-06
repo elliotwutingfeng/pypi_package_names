@@ -15,6 +15,7 @@
   </p>
 
   <p align="center">
+  <a href="https://0dependencies.dev"><img src="https://img.shields.io/badge/0-Dependencies!-d1331b?style=for-the-badge&labelColor=229922" alt="0 Dependencies!"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/LICENSE-0BSD-GREEN?style=for-the-badge" alt="0BSD"/></a>
   <a href="https://coveralls.io/github/elliotwutingfeng/pypi_package_names?branch=main"><img src="https://img.shields.io/coverallsCoverage/github/elliotwutingfeng/pypi_package_names?logo=coveralls&style=for-the-badge" alt="Coveralls"/></a>
   <img src='https://coveralls.io/repos/github/elliotwutingfeng/pypi_package_names/badge.svg?branch=main' alt='' width="0" height="0" />
